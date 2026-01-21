@@ -1,0 +1,180 @@
+/* static/css/style.css */
+
+/* =====================
+   GLOBAL VARIABLES
+===================== */
+:root {
+    --bg-primary:    #141E30;
+    --bg-secondary:  #1e2a44;
+    --accent:        #5c8aff;
+    --text-primary:  #ffffff;
+    --text-secondary:#b0c4ff;
+    --danger:        #ff6b6b;
+    --success:       #51cf66;
+    --gray:          #6c757d;
+}
+
+/* =====================
+   RESET (SAFE)
+===================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ❗ DO NOT STYLE BODY BACKGROUND FOR LOGIN */
+body {
+    min-height: 100vh;
+}
+
+/* =====================
+   LOGIN PAGE CONTAINER
+   (DO NOT STYLE VISUALS)
+===================== */
+.login-full {
+    min-height: 100vh;
+    display: flex;
+}
+
+/* =====================
+   MAIN APP CONTENT
+===================== */
+.main-content {
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 1rem;
+    padding-bottom: 5rem; /* bottom nav space */
+}
+
+/* =====================
+   CARDS
+===================== */
+.main-content .card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* =====================
+   BUTTONS
+===================== */
+.main-content .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.9rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    touch-action: manipulation;
+}
+
+.main-content .btn-primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+.main-content .btn-primary:active {
+    background: #4a6ed9;
+    transform: scale(0.98);
+}
+
+.main-content .btn-danger {
+    background: var(--danger);
+    color: #fff;
+}
+
+/* =====================
+   TOAST
+===================== */
+.toast {
+    position: fixed;
+    bottom: 5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    padding: 0.9rem 1.5rem;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    font-size: 0.95rem;
+    max-width: 90%;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+/* =====================
+   BOTTOM NAVIGATION
+===================== */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-around;
+    padding: 0.6rem 0;
+    z-index: 900;
+}
+
+.nav-item {
+    color: white;
+    text-decoration: none;
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.8rem;
+    flex: 1;
+    max-width: 80px;
+    text-align: center;
+}
+
+.nav-item.active {
+    color: var(--accent);
+}
+
+.nav-item i {
+    font-size: 1.5rem;
+}
+
+/* Proforma & Service Invoice Styles */
+.proforma-container, .service-invoice-container {
+    padding: 1rem;
+    padding-bottom: 8rem;
+}
+
+.fab-proforma {
+    background: #ff9800; /* orange accent for proforma */
+}
+
+.service-invoice-container .card {
+    margin-bottom: 1.5rem;
+}
+
+.service-invoice-container p {
+    font-size: 1.1rem;
+    margin: 0.5rem 0;
+}

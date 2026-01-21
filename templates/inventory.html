@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inventory - Mobile Billing{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/inventory.css' %}">
+<style>
+    /* Floating Action Button for Proforma Invoice */
+    .fab-proforma {
+        position: fixed;
+        bottom: 7rem; 
+        right: 1.5rem;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #ff9800;
+        color: white;
+        font-size: 1.8rem;
+        border: none;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        z-index: 950;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .fab-proforma:hover { transform: scale(1.1); background: #fb8c00; }
+    .fab-proforma:active { transform: scale(0.95); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="inventory-page">
+
+    <!-- HEADER -->
+    <header class="inventory-header">
+        <img src="{% static 'images/logo.png' %}" class="inventory-logo">
+        <span class="inventory-title">Inventory Management</span>
+    </header>
+
+    <!-- Floating Action Button -->
+    <button id="createProformaBtn" class="fab fab-proforma" title="Create Proforma Invoice">
+        <i class="fas fa-file-invoice-dollar"></i>
+    </button>
+
+    <!-- ADD / EDIT PRODUCT FORM -->
+    <section class="card">
+        <form id="addProductForm">
+            <h4 class="section-title">Add / Edit Product</h4>
+
+            <div class="input-group">
+                <span class="input-icon">📦</span>
+                <input type="text" id="productName" placeholder=" ">
+                <label>Product Name</label>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group flex-1">
+                    <span class="input-icon">🔢</span>
+                    <input type="text" id="imei" placeholder=" ">
+                    <label>IMEI (Optional)</label>
+                </div>
+                <div class="input-group flex-1">
+                    <span class="input-icon">🧾</span>
+                    <input type="number" id="gst" placeholder=" " step="0.01" min="0">
+                    <label>GST %</label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group flex-1">
+                    <span class="input-icon">💰</span>
+                    <input type="number" id="sellingPrice" placeholder=" " step="0.01">
+                    <label>Selling Price</label>
+                </div>
+                <div class="input-group flex-1">
+                    <span class="input-icon">💵</span>
+                    <input type="number" id="purchasePrice" placeholder=" " step="0.01">
+                    <label>Purchase Price</label>
+                </div>
+            </div>
+
+            <!-- CATEGORY INPUT -->
+            <div class="input-group">
+                <span class="input-icon">📂</span>
+                <input type="text" id="productCategory" placeholder=" ">
+                <label>Category</label>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group flex-1">
+                    <span class="input-icon">📊</span>
+                    <input type="number" id="initialStock" placeholder=" " min="0">
+                    <label>Initial Stock</label>
+                </div>
+                <div class="input-group flex-1">
+                    <span class="input-icon">🏢</span>
+                    <input type="text" id="agencyName" placeholder=" ">
+                    <label>Agency Name (Optional)</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary full-width" id="saveProductBtn">Save Product</button>
+            <button type="button" class="btn btn-outline full-width" id="clearProductBtn">Clear</button>
+        </form>
+    </section>
+
+    <!-- PRODUCTS TABLE -->
+    <section class="card">
+        <h4 class="section-title">Products List</h4>
+        <div class="table-container">
+            <table id="productsTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>IMEI</th>
+                        <th>GST %</th>
+                        <th>Selling</th>
+                        <th>Purchase</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Agency</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button id="prevPage" disabled>Previous</button>
+            <span id="pageInfo">Page 1 of 1</span>
+            <button id="nextPage" disabled>Next</button>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/inventory.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const proformaBtn = document.getElementById('createProformaBtn');
+        if (proformaBtn) {
+            proformaBtn.addEventListener('click', function () {
+                window.location.href = "{% url 'proforma_invoice' %}";
+            });
+        }
+    });
+</script>
+{% endblock %}

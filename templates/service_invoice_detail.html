@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Service Invoice - {{ service.service_id }}{% endblock %}
+
+{% block content %}
+<div class="service-invoice-container">
+    <div class="page-header">
+        <h1>Service Invoice</h1>
+        <p>ID: {{ service.service_id }}</p>
+    </div>
+
+    <div class="card customer-card">
+        <h3>Customer Details</h3>
+        <p><strong>Name:</strong> {{ service.customer_name }}</p>
+        <p><strong>Phone:</strong> {{ service.customer_phone }}</p>
+        <p><strong>Date:</strong> {{ service.created_at|date:"d M Y, h:i A" }}</p>
+    </div>
+
+    <div class="card service-details">
+        <h3>Service Information</h3>
+        <p><strong>Type:</strong> {{ service.service_type }}</p>
+        <p><strong>Price:</strong> ₹{{ service.service_price|floatformat:2 }}</p>
+        <p><strong>Issue:</strong> {{ service.issue|linebreaksbr }}</p>
+    </div>
+
+    <div class="action-buttons">
+        <button id="printServiceInvoice" class="btn btn-primary">Print Invoice</button>
+        <a href="{% url 'invoice' %}" class="btn btn-secondary">Back to Invoices</a>
+    </div>
+</div>
+
+<!-- Print Modal -->
+<div id="servicePrintModal" class="modal">
+    <div class="modal-content">
+        <div class="print-preview" id="servicePrintPreview">
+            <!-- Generated print content -->
+        </div>
+        <div class="modal-actions">
+            <button id="servicePrintBtn" class="btn btn-primary">Print</button>
+            <button id="serviceClosePrintBtn" class="btn btn-secondary">Close</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/service_invoice.js' %}"></script>
+{% endblock %}

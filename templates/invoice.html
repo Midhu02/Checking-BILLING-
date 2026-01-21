@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Invoices - Mobile Billing{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/invoice.css' %}">
+<style>
+    .invoice-tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+        flex: 1;
+        padding: 1rem;
+        background: var(--bg-secondary);
+        border: none;
+        border-radius: 12px;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .tab-btn.active {
+        background: var(--accent);
+        color: white;
+    }
+    .tab-btn:hover {
+        opacity: 0.9;
+    }
+    .invoice-list {
+        min-height: 300px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="invoice-page">
+
+    <!-- HEADER -->
+    <header class="invoice-header">
+        <h2>Invoices</h2>
+    </header>
+
+    <!-- Tabs / Buttons -->
+    <div class="invoice-tabs">
+        <button id="productTabBtn" class="tab-btn active">Product Invoices</button>
+        <button id="serviceTabBtn" class="tab-btn">Service Invoices</button>
+    </div>
+
+    <!-- FILTER CARD -->
+    <section class="card">
+        <h4 class="section-title">Filters</h4>
+
+        <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="dateFilter">
+        </div>
+
+        <div class="form-group">
+            <label>Customer Name</label>
+            <input type="text" id="customerFilter" placeholder="Search customer">
+        </div>
+
+        <div class="button-row">
+            <button id="clearFilters" class="btn btn-outline">Clear</button>
+            <!-- <button id="exportBtn" class="btn btn-primary">Export CSV</button> -->
+        </div>
+    </section>
+
+    <!-- INVOICE LIST -->
+    <section class="card invoice-list">
+        <h4 class="section-title" id="listTitle">Product Invoice List</h4>
+
+        <div class="table-container">
+            <table id="invoicesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="invoicesBody">
+                    <!-- Dynamic content loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <button id="prevInvoicePage" disabled>Prev</button>
+            <span id="invoicePageInfo">Page 1 of 1</span>
+            <button id="nextInvoicePage" disabled>Next</button>
+        </div>
+    </section>
+
+</div>
+
+<!-- INVOICE DETAIL MODAL -->
+<div id="invoiceDetailModal" class="modal">
+    <div class="modal-content">
+        <div id="invoiceDetailContent"></div>
+        <div class="modal-actions">
+            <button id="printInvoiceBtn" class="btn btn-primary">Print</button>
+            <button id="closeInvoiceDetail" class="btn btn-secondary">Close</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/invoice.js' %}"></script>
+{% endblock %}

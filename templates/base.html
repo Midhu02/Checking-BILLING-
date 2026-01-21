@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mobile Billing PWA{% endblock %}</title>
+
+    <!-- CSRF Token for API requests -->
+    {% csrf_token %}
+
+    <!-- PWA -->
+    <link rel="manifest" href="{% static 'manifest.json' %}">
+    <meta name="theme-color" content="#292F91">
+    <link rel="icon" href="{% static 'images/icon.png' %}">
+
+    <!-- Base Styles (ALWAYS LOAD) -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Page Specific CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Main Content -->
+    <main class="{% if user.is_authenticated %}main-content{% else %}login-full{% endif %}">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bottom Navigation (ONLY AFTER LOGIN) -->
+    {% if user.is_authenticated %}
+    <nav class="bottom-nav">
+        <a href="{% url 'billing' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'billing' %}active{% endif %}">
+            <i class="fas fa-receipt"></i>
+            <span>Billing</span>
+        </a>
+
+        <a href="{% url 'service' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'service' %}active{% endif %}">
+            <i class="fas fa-tools"></i>
+            <span>Service</span>
+        </a>
+
+        {% if user.is_superuser %}
+        <a href="{% url 'inventory' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'inventory' %}active{% endif %}">
+            <i class="fas fa-boxes-stacked"></i>
+            <span>Inventory</span>
+        </a>
+
+        <a href="{% url 'invoice' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'invoice' %}active{% endif %}">
+            <i class="fas fa-file-invoice"></i>
+            <span>Invoices</span>
+        </a>
+
+        <a href="{% url 'reports' %}"
+            class="nav-item {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">
+            <i class="fas fa-chart-line"></i>
+            <span>Reports</span>
+        </a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'sw.js' %}");
+        }
+    </script>
+
+    <script src="{% static 'js/app.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

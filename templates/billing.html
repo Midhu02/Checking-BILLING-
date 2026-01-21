@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Billing{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/billing.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="billing-page">
+
+    <!-- HEADER -->
+    <header class="billing-header">
+        <img src="{% static 'images/logo.png' %}" class="billing-logo">
+        <span class="billing-title">Mobile Billing</span>
+    </header>
+
+    <!-- CUSTOMER DETAILS -->
+    <section class="card">
+        <h4 class="section-title">Customer Details</h4>
+
+        <div class="input-group">
+            <span class="input-icon">👤</span>
+            <input type="text" id="customerName" placeholder=" ">
+            <label>Customer Name</label>
+        </div>
+
+        <div class="input-group">
+            <span class="input-icon">📞</span>
+            <input type="text" id="customerPhone" placeholder=" ">
+            <label>Mobile Number</label>
+        </div>
+
+        <div class="input-group">
+            <span class="input-icon">🧾</span>
+            <input type="text" id="invoiceNo" readonly placeholder=" ">
+            <label>Invoice No</label>
+        </div>
+    </section>
+
+    <!-- ADD PRODUCT -->
+    <section class="card">
+        <h4 class="section-title">Add Product</h4>
+
+        <div class="input-group">
+            <span class="input-icon">🔍</span>
+            <input type="text" id="productSearch" autocomplete="off" placeholder=" ">
+            <label>Search Product</label>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group flex-1">
+                <span class="input-icon">💰</span>
+                <input type="text" id="price" readonly placeholder=" ">
+                <label>Price ₹</label>
+            </div>
+
+            <div class="input-group flex-1">
+                <span class="input-icon">📦</span>
+                <input type="text" id="stockDisplay" readonly placeholder=" "
+                    style="color: #e67e22; font-weight: bold;">
+                <label>Available Stock</label>
+            </div>
+
+            <div class="input-group flex-1">
+                <span class="input-icon">🔢</span>
+                <input type="number" id="quantity" min="1" value="1">
+            </div>
+        </div>
+
+        <button id="addItemBtn" class="btn btn-primary full-width">
+            + Add to Cart
+        </button>
+    </section>
+
+    <!-- CART -->
+    <section class="card">
+        <h4 class="section-title">Cart</h4>
+        <div id="itemsList" class="cart-list"></div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="summary-card">
+        <div class="summary-row">
+            <span>Subtotal</span>
+            <span id="subtotal">₹0.00</span>
+        </div>
+        <div class="summary-row">
+            <span>GST</span>
+            <span id="gst">₹0.00</span>
+        </div>
+        <div class="summary-row total">
+            <span>Total</span>
+            <span id="grandTotal">₹0.00</span>
+        </div>
+    </section>
+
+    <!-- ACTION BAR -->
+    <div class="billing-action-bar">
+        <button id="saveBillBtn" class="btn btn-primary">Save Invoice</button>
+        <button id="clearBillBtn" class="btn btn-outline">Clear</button>
+    </div>
+</div>
+
+<!-- SAVE CONFIRM MODAL -->
+<div id="saveConfirmModal" class="popup-overlay" style="display:none;">
+    <div class="popup-card" style="max-width:320px;">
+        <h4>Invoice Saved ✅</h4>
+
+        <label style="display:flex;gap:8px;margin:15px 0;">
+            <input type="checkbox" id="printCheckbox" checked>
+            Print Invoice
+        </label>
+
+        <button id="confirmSaveBtn" class="btn btn-primary full-width">OK</button>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/billing.js' %}"></script>
+{% endblock %}

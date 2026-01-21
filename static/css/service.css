@@ -1,0 +1,272 @@
+/* =====================================================
+   VARIABLES
+===================================================== */
+:root {
+    --bg-primary: #141E30;
+    --bg-card: #1f2937;
+    --accent: #4CA8DD;
+    --accent-dark: #3F91C1;
+    --text-light: #f5f5f5;
+    --text-muted: #a0aec0;
+
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --shadow: 0 8px 22px rgba(0,0,0,0.25);
+}
+
+/* =====================================================
+   RESET (IMPORTANT FOR MOBILE SHIFT FIX)
+===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-light);
+}
+
+/* =====================================================
+   PAGE CONTAINER
+===================================================== */
+.service-page {
+    width: 100%;
+    max-width: 430px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+.service-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.service-logo {
+    height: 40px;
+    border-radius: 8px;
+}
+
+.service-title {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: var(--shadow);
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 14px;
+}
+
+/* =====================================================
+   INPUT GROUPS
+===================================================== */
+.input-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 14px 14px 14px 38px;
+    border-radius: var(--radius-md);
+    border: 2px solid #374151;
+    background: #2a2f44;
+    color: var(--text-light);
+    font-size: 14px;
+    outline: none;
+    resize: none;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(76,168,221,0.25);
+}
+
+/* FLOATING LABEL */
+.input-group label {
+    position: absolute;
+    left: 38px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: var(--text-muted);
+    pointer-events: none;
+    transition: 0.2s ease;
+    background: transparent;
+}
+
+.input-group input:focus + label,
+.input-group textarea:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group textarea:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--bg-card);
+    padding: 0 4px;
+}
+
+/* ICON */
+.input-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+}
+
+/* =====================================================
+   FORM ROW
+===================================================== */
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+    color: #fff;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    font-size: 13px;
+    text-align: left;
+}
+
+th {
+    background: #2a2f44;
+    font-weight: 600;
+}
+
+td {
+    border-bottom: 1px solid #374151;
+}
+
+/* ACTION BUTTONS */
+table button {
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+.edit-btn {
+    background: var(--accent);
+    color: #fff;
+}
+
+.delete-btn {
+    background: #dc2626;
+    color: #fff;
+}
+
+/* =====================================================
+   PAGINATION
+===================================================== */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.pagination button {
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+}
+
+.pagination button:disabled {
+    opacity: 0.5;
+}
+
+/* =====================================================
+   MOBILE FIXES
+===================================================== */
+@media (max-width: 380px) {
+    .service-page {
+        padding: 12px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    table {
+        min-width: 480px;
+    }
+}

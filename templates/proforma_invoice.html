@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Proforma Invoice - Mobile Billing{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/proforma.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="proforma-container">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Proforma Invoice</h1>
+        <p>Create quotation / preliminary bill</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs-navigation" style="display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;">
+        <button type="button" class="tab-btn active" data-tab="create-tab">Create New</button>
+        <button type="button" class="tab-btn" data-tab="list-tab">View Proformas</button>
+    </div>
+
+    <!-- CREATE TAB -->
+    <div id="create-tab" class="tab-content" style="display:block;">
+
+        <!-- Customer Details -->
+        <div class="card customer-card">
+            <h3>Customer Details</h3>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="proCustomerName" placeholder="Enter name">
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="proCustomerPhone" placeholder="Enter phone">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Proforma No</label>
+                <input type="text" id="proInvoiceNo" disabled placeholder="PF-XXXXXX">
+            </div>
+
+            <div class="form-group">
+                <label>Valid Until</label>
+                <input type="date" id="proValidUntil">
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="card">
+            <h3>Billing & Delivery Address</h3>
+            <textarea id="billingAddress" rows="3" placeholder="Billing Address"></textarea>
+            <textarea id="deliveryAddress" rows="3" placeholder="Delivery Address"></textarea>
+        </div>
+
+        <!-- Items -->
+        <div class="card items-card">
+            <h3>Items</h3>
+
+            <div class="add-item-form">
+                <label for="proProductSearch">Product</label>
+                <input type="text" id="proProductSearch" placeholder="Search product..." list="proProductList">
+                <datalist id="proProductList"></datalist>
+
+                <input type="hidden" id="proProductId">
+                <input type="number" id="proQuantity" min="1" value="1" placeholder="Qty">
+
+                <button type="button" id="proAddItemBtn" class="btn btn-primary">Add</button>
+            </div>
+
+            <div id="proItemsList" class="items-list"></div>
+        </div>
+
+        <!-- Charges -->
+        <div class="card">
+            <h3>Additional Charges</h3>
+            <input type="number" id="discountAmount" placeholder="Discount">
+            <input type="number" id="shippingCharge" placeholder="Shipping">
+            <input type="number" id="insuranceCharge" placeholder="Insurance">
+        </div>
+
+        <!-- Trade & Payment -->
+        <div class="card">
+            <h3>Trade & Payment</h3>
+
+            <div class="form-row">
+                <input type="text" id="incoterms" placeholder="Incoterms (EXW / FOB / CIF)">
+                <input type="text" id="countryOrigin" placeholder="Country of Origin">
+            </div>
+
+            <input type="text" id="paymentTerms" placeholder="Payment Terms">
+            <input type="text" id="bankDetails" placeholder="Bank / IFSC / SWIFT">
+        </div>
+
+        <!-- Totals -->
+        <div class="card totals-card">
+            <div class="total-row">
+                <span>Subtotal</span>
+                <span id="proSubtotal">₹0.00</span>
+            </div>
+            <div class="total-row">
+                <span>GST (<span id="gstRate">18</span>%)</span>
+                <span id="proGst">₹0.00</span>
+            </div>
+            <div class="total-row grand">
+                <span>Total</span>
+                <span id="proGrandTotal">₹0.00</span>
+            </div>
+
+            <button type="button" id="saveProformaBtn" class="btn btn-primary save-btn">Save Proforma</button>
+            <button type="button" id="printProformaBtn" class="btn btn-secondary">Print</button>
+        </div>
+    </div>
+
+    <!-- LIST TAB -->
+    <div id="list-tab" class="tab-content" style="display:none;">
+        <div class="card">
+            <h3>Saved Proformas</h3>
+            <div style="overflow-x:auto;">
+                <table id="proformasTable">
+                    <thead>
+                        <tr>
+                            <th>Proforma No</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th style="text-align:center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proformasTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align:center;color:#999;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- PRINT MODAL -->
+<div id="proPrintModal" class="modal">
+    <div class="modal-content">
+        <div class="print-preview" id="proPrintPreview"></div>
+        <div class="modal-actions">
+            <button type="button" id="proPrintBtn" class="btn btn-primary">Print</button>
+            <button type="button" id="proClosePrintBtn" class="btn btn-secondary">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- DETAILS MODAL -->
+<div id="proformaDetailsModal" class="modal" style="display:none;">
+    <div class="modal-content" style="max-width:900px;">
+        <div style="display:flex;justify-content:space-between;">
+            <h2>Proforma & Invoice Details</h2>
+            <button type="button" onclick="document.getElementById('proformaDetailsModal').style.display='none'">×</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <div>
+                <h4>Proforma Invoice</h4>
+                <div id="proformaDetailsLeft"></div>
+            </div>
+
+            <div id="invoiceDetailsRight" style="display:none;">
+                <h4>Corresponding Invoice</h4>
+                <div id="invoiceDetailsContent"></div>
+            </div>
+
+            <div id="noInvoiceMsg" style="display:none;">
+                No invoice created from this proforma yet.
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/proforma.js' %}"></script>
+{% endblock %}

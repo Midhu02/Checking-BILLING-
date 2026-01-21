@@ -1,0 +1,12 @@
+{
+  "name": "Mobile Billing App",
+  "short_name": "Billing",
+  "start_url": "/billing/",
+  "display": "standalone",
+  "theme_color": "#141E30",
+  "background_color": "#141E30",
+  "icons": [
+    { "src": "/static/images/logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/static/images/logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

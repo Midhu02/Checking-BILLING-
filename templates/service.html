@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Service - Mobile Billing{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/service.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="service-page service-container">
+
+    <!-- HEADER -->
+    <header class="service-header">
+        <img src="{% static 'images/logo.png' %}" class="service-logo">
+        <span class="service-title">Service Management</span>
+    </header>
+
+    <!-- SERVICE FORM -->
+    <section class="card">
+        <h4 class="section-title">Create New Service</h4>
+        <form id="serviceForm">
+
+            <div class="form-row">
+                <div class="input-group flex-1">
+                    <span class="input-icon">🧾</span>
+                    <input type="text" id="serviceInvoiceNo" placeholder=" " readonly>
+                    <label>Service Invoice Number (Auto-generated)</label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group flex-1">
+                    <span class="input-icon">👤</span>
+                    <input type="text" id="serviceCustomerName" placeholder=" " required>
+                    <label>Customer Name</label>
+                </div>
+                <div class="input-group flex-1">
+                    <span class="input-icon">📞</span>
+                    <input type="tel" id="serviceCustomerPhone" placeholder=" " required>
+                    <label>Customer Phone</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">🛠️</span>
+                <input type="text" id="serviceType" placeholder=" " required>
+                <label>Service Type</label>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">💰</span>
+                <input type="number" id="servicePrice" step="0.01" placeholder=" " required>
+                <label>Service Price</label>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">📝</span>
+                <textarea id="serviceIssue" rows="3" placeholder=" "></textarea>
+                <label>Issue Description</label>
+            </div>
+
+            <div class="action-buttons">
+                <button type="submit" class="btn btn-primary full-width">Save Service</button>
+                <button type="button" id="clearServiceForm" class="btn btn-outline full-width">Clear Form</button>
+            </div>
+
+        </form>
+    </section>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/service.js' %}"></script>
+{% endblock %}
