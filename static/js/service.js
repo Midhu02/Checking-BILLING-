@@ -100,38 +100,37 @@ class ServiceManager {
             service_price: parseFloat(document.getElementById('servicePrice').value),
             issue: document.getElementById('serviceIssue').value.trim()
         };
-        
-        // Validation
-        if (!formData.customer_name || !formData.service_type || isNaN(formData.service_price) || formData.service_price <= 0) {
-            window.billingApp.showToast('Please fill all required fields correctly', 'error');
+
+        if (!formData.customer_name || !formData.service_type || isNaN(formData.service_price)) {
+            window.billingApp.showToast('Please fill all required fields', 'error');
             return;
         }
+
+        // --- NEW POPUP LOGIC ---
+        const shouldPrint = confirm("Service saved! Do you want to print the Thermal Invoice?");
         
         try {
             const response = await window.billingApp.apiRequest('/api/services/create/', {
                 method: 'POST',
                 body: JSON.stringify(formData)
             });
-            
-            console.log('Service creation response:', response);
-            
-            // Get the display invoice number from form (client-side generated)
+
             const displayInvoiceNo = document.getElementById('serviceInvoiceNo').value;
-            
-            // Show success alert with Service Invoice Number
+
+            // If user clicked 'OK' on the popup
+            if (shouldPrint) {
+                this.printServiceThermalInvoice({
+                    ...formData,
+                    service_id: response.service_id,
+                    service_invoice_no: displayInvoiceNo,
+                    created_at: new Date().toISOString()
+                });
+            }
+
             this.showSuccessAlert(response.service_id, displayInvoiceNo);
-            
             this.loadServices();
-            
-            // Clear form and generate new invoice number for next service
-            setTimeout(() => {
-                this.clearForm();
-            }, 2000);
-            
-            // Notify other pages (like Invoice) that a new service was created
-            window.dispatchEvent(new CustomEvent('serviceCreated', {
-                detail: { serviceId: response.service_id, serviceInvoiceNo: displayInvoiceNo }
-            }));
+            setTimeout(() => this.clearForm(), 1000);
+
         } catch (error) {
             console.error('Failed to create service:', error);
             window.billingApp.showToast('Failed to create service', 'error');
@@ -289,7 +288,71 @@ class ServiceManager {
             nextBtn.disabled = this.currentPage >= totalPages;
         }
     }
+
+    printServiceThermalInvoice(service) {
+        const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <style>
+                body { width: 58mm; font-family: monospace; font-size: 12px; margin: 0; padding: 5px; }
+                .center { text-align: center; }
+                .bold { font-weight: bold; }
+                hr { border: none; border-top: 1px dashed #000; margin: 5px 0; }
+                table { width: 100%; border-collapse: collapse; }
+                .total-row { font-size: 14px; font-weight: bold; }
+                .footer { margin-top: 10px; font-size: 10px; }
+            </style>
+        </head>
+        <body>
+            <div class="center bold">
+                AGS MOBILES & ACCESSORIES<br>
+                SERVICE RECEIPT
+            </div>
+            <hr>
+            <div>Inv: ${service.service_invoice_no}</div>
+            <div>Date: ${new Date().toLocaleString()}</div>
+            <div>Cust: ${service.customer_name}</div>
+            <div>Ph: ${service.customer_phone}</div>
+            <hr>
+            <table>
+                <tr>
+                    <td class="bold">Service:</td>
+                    <td style="text-align:right">${service.service_type}</td>
+                </tr>
+            </table>
+            <div style="margin-top:5px;">
+                <div class="bold">Issue:</div>
+                <div style="font-size:11px;">${service.issue || 'General Service'}</div>
+            </div>
+            <hr>
+            <table>
+                <tr class="total-row">
+                    <td>TOTAL</td>
+                    <td style="text-align:right">₹${service.service_price.toFixed(2)}</td>
+                </tr>
+            </table>
+            <hr>
+            <div class="footer center">
+                Warranty as per service terms.<br>
+                Thank you! 🙏
+            </div>
+            <script>
+                window.onload = () => {
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+            </script>
+        </body>
+        </html>`;
+
+        const w = window.open('', '', 'width=300,height=600');
+        w.document.write(html);
+        w.document.close();
+    }
 }
+
 
 // Initialize service manager
 document.addEventListener('DOMContentLoaded', () => {
