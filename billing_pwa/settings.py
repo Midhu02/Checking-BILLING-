@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-6z9y!3g-p47b-_7q!$zj-$3q3it+e5y*js!lghtw^i)m-s+8q$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    "checking-billing-production.up.railway.app",
+]
 
 
 # Application definition
@@ -175,3 +177,8 @@ LOGOUT_REDIRECT_URL = '/'
 CSRF_TRUSTED_ORIGINS = [
     "https://checking-billing-production.up.railway.app"
 ]
+
+WHITENOISE_MIMETYPES = {
+    ".json": "application/manifest+json",
+    ".js": "application/javascript",
+}
