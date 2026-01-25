@@ -60,7 +60,8 @@
             <span>Reports</span>
         </a>
 
-        <a href="{% url 'logout' %}" class="nav-item logout-btn">
+        <a href="{% url 'logout' %}" class="nav-item logout-btn"
+           onclick="return confirm('Are you sure you want to logout?');">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
