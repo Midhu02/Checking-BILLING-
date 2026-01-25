@@ -178,3 +178,11 @@ body {
     font-size: 1.1rem;
     margin: 0.5rem 0;
 }
+
+.logout-btn {
+    color: #ff4d4d;
+}
+
+.logout-btn i {
+    color: #ff4d4d;
+}
