@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-6z9y!3g-p47b-_7q!$zj-$3q3it+e5y*js!lghtw^i)m-s+8q$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -163,34 +163,6 @@ LOGIN_REDIRECT_URL = '/billing/'
 LOGOUT_REDIRECT_URL = '/'
 
 
-# PWA Settings
-PWA_APP_NAME = 'Mobile Billing PWA'
-PWA_APP_DESCRIPTION = 'Mobile Billing Software'
-PWA_APP_THEME_COLOR = '#000000'
-PWA_APP_BACKGROUND_COLOR = '#ffffff'
-PWA_APP_DISPLAY = 'standalone'
-PWA_APP_SCOPE = '/'
-PWA_APP_ORIENTATION = 'any'
-PWA_APP_START_URL = '/'
-PWA_APP_STATUS_BAR_COLOR = 'default'
-PWA_APP_ICONS = [
-    {
-        'src': '/static/images/icon.png',
-        'sizes': '192x192',
-        'type': 'image/png'
-    }
-]
-PWA_APP_ICONS_APPLE = [
-    {
-        'src': '/static/images/icon.png',
-        'sizes': '192x192',
-        'type': 'image/png'
-    }
-]
-PWA_APP_SPLASH_SCREENS = [
-    {
-        'src': '/static/images/splash.png',
-        'sizes': '1080x1920',
-        'type': 'image/png'
-    }
+CSRF_TRUSTED_ORIGINS = [
+    "https://checking-billing-production.up.railway.app"
 ]
