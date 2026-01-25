@@ -1,7 +1,8 @@
 {
   "name": "Mobile Billing App",
   "short_name": "Billing",
-  "start_url": "/billing/",
+  "start_url": "/login/",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#141E30",
   "background_color": "#141E30",
