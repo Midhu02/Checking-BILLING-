@@ -60,13 +60,13 @@
             <span>Reports</span>
         </a>
 
+        {% endif %}        
+        
         <a href="{% url 'logout' %}" class="nav-item logout-btn"
            onclick="return confirm('Are you sure you want to logout?');">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
         </a>
-
-        {% endif %}
     </nav>
     {% endif %}
 
