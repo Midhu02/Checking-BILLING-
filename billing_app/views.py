@@ -4,7 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models
 from datetime import datetime
-from django.db.models import ProtectedError
+from django.db.models import ProtectedError, Sum
+from django.utils.dateparse import parse_date
+
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -239,22 +241,29 @@ def service_list(request):
 def reports_data(request):
     today = datetime.now().date()
 
-    total_sales = Bill.objects.aggregate(
-        total=models.Sum('grand_total')
-    )['total'] or 0
+    start_date = parse_date(request.GET.get('start'))
+    end_date = parse_date(request.GET.get('end'))
 
-    service_income = Service.objects.aggregate(
-        total=models.Sum('service_price')
-    )['total'] or 0
+    bill_qs = Bill.objects.all()
+    service_qs = Service.objects.all()
+
+    # 🔹 Apply date filter if provided
+    if start_date and end_date:
+        bill_qs = bill_qs.filter(created_at__date__range=[start_date, end_date])
+        service_qs = service_qs.filter(created_at__date__range=[start_date, end_date])
+
+    # 🔹 Aggregations
+    total_sales = bill_qs.aggregate(total=Sum('grand_total'))['total'] or 0
+    service_income = service_qs.aggregate(total=Sum('service_price'))['total'] or 0
 
     daily_sales = Bill.objects.filter(
         created_at__date=today
-    ).aggregate(total=models.Sum('grand_total'))['total'] or 0
+    ).aggregate(total=Sum('grand_total'))['total'] or 0
 
     month_start = today.replace(day=1)
     monthly_sales = Bill.objects.filter(
         created_at__date__gte=month_start
-    ).aggregate(total=models.Sum('grand_total'))['total'] or 0
+    ).aggregate(total=Sum('grand_total'))['total'] or 0
 
     return Response({
         'total_sales': float(total_sales),
@@ -263,7 +272,6 @@ def reports_data(request):
         'monthly_sales': float(monthly_sales),
         'total_revenue': float(total_sales + service_income)
     })
-
 
 # ==========================
 # PROFORMA APIs (ADMIN)
