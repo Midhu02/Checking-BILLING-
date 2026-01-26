@@ -178,6 +178,13 @@ CSRF_TRUSTED_ORIGINS = [
     "https://checking-billing-production.up.railway.app"
 ]
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = 'None'
+
+
 WHITENOISE_MIMETYPES = {
     ".json": "application/manifest+json",
     ".js": "application/javascript",
