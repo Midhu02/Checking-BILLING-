@@ -244,8 +244,8 @@ def reports_data(request):
     start_raw = request.GET.get('start')
     end_raw = request.GET.get('end')
     
-    start_date = parse_date(start_raw) if start_raw else None
-    end_date = parse_date(end_raw) if end_raw else None
+    start_date = parse_date(start_raw) if start_raw not in (None, "", "null") else None
+    end_date = parse_date(end_raw) if end_raw not in (None, "", "null") else None
 
 
     bill_qs = Bill.objects.all()
