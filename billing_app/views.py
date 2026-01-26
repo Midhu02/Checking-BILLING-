@@ -237,7 +237,7 @@ def service_list(request):
 # REPORTS (ADMIN ONLY)
 # ==========================
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+@permission_classes([IsStaffOrAdminUser])
 def reports_data(request):
     today = datetime.now().date()
 
