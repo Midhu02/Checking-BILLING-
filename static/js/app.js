@@ -31,7 +31,7 @@ class BillingApp {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': this.csrfToken,
             },
-            credentials: 'same-origin', // <--- MUST have this
+            credentials: 'include', // <--- MUST have this
             ...options
         };
 
