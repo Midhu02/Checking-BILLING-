@@ -237,57 +237,35 @@ def service_list(request):
 # REPORTS (ADMIN ONLY)
 # ==========================
 @api_view(['GET'])
-@permission_classes([IsStaffOrAdminUser])
+@permission_classes([IsAdminUser])
 def reports_data(request):
     today = datetime.now().date()
 
-    start_raw = request.GET.get('start')
-    end_raw = request.GET.get('end')
-    
-    start_date = parse_date(start_raw) if start_raw not in (None, "", "null") else None
-    end_date = parse_date(end_raw) if end_raw not in (None, "", "null") else None
+    total_sales = Bill.objects.aggregate(
+        total=models.Sum('grand_total')
+    )['total'] or 0
 
+    service_income = Service.objects.aggregate(
+        total=models.Sum('service_price')
+    )['total'] or 0
 
-    bill_qs = Bill.objects.all()
-    service_qs = Service.objects.all()
-
-    # 🔹 Apply date filter if provided
-    if start_date and end_date:
-        bill_qs = bill_qs.filter(created_at__date__range=[start_date, end_date])
-        service_qs = service_qs.filter(created_at__date__range=[start_date, end_date])
-
-    # 🔹 Aggregations
-    total_sales = bill_qs.aggregate(total=Sum('grand_total'))['total'] or 0
-    service_income = service_qs.aggregate(total=Sum('service_price'))['total'] or 0
-
-    today = timezone.now().date()
-
-    # --- Bills ---
-    daily_bill_sales = Bill.objects.filter(
+    daily_sales = Bill.objects.filter(
         created_at__date=today
-    ).aggregate(total=Sum('grand_total'))['total'] or 0
-    
-    monthly_bill_sales = Bill.objects.filter(
-        created_at__date__gte=today.replace(day=1)
-    ).aggregate(total=Sum('grand_total'))['total'] or 0
-    
-    # --- Services ---
-    daily_service_income = Service.objects.filter(
-        created_at__date=today
-    ).aggregate(total=Sum('service_price'))['total'] or 0
-    
-    monthly_service_income = Service.objects.filter(
-        created_at__date__gte=today.replace(day=1)
-    ).aggregate(total=Sum('service_price'))['total'] or 0
+    ).aggregate(total=models.Sum('grand_total'))['total'] or 0
 
+    month_start = today.replace(day=1)
+    monthly_sales = Bill.objects.filter(
+        created_at__date__gte=month_start
+    ).aggregate(total=models.Sum('grand_total'))['total'] or 0
 
     return Response({
         'total_sales': float(total_sales),
         'service_income': float(service_income),
-        'daily_sales': float(daily_bill_sales + daily_service_income),
-        'monthly_sales': float(monthly_bill_sales + monthly_service_income),
-        'total_revenue': float(total_sales + service_income),
+        'daily_sales': float(daily_sales),
+        'monthly_sales': float(monthly_sales),
+        'total_revenue': float(total_sales + service_income)
     })
+
 
 # ==========================
 # PROFORMA APIs (ADMIN)
