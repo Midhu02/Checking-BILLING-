@@ -241,8 +241,12 @@ def service_list(request):
 def reports_data(request):
     today = datetime.now().date()
 
-    start_date = parse_date(request.GET.get('start'))
-    end_date = parse_date(request.GET.get('end'))
+    start_raw = request.GET.get('start')
+    end_raw = request.GET.get('end')
+    
+    start_date = parse_date(start_raw) if start_raw else None
+    end_date = parse_date(end_raw) if end_raw else None
+
 
     bill_qs = Bill.objects.all()
     service_qs = Service.objects.all()
