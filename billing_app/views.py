@@ -260,21 +260,33 @@ def reports_data(request):
     total_sales = bill_qs.aggregate(total=Sum('grand_total'))['total'] or 0
     service_income = service_qs.aggregate(total=Sum('service_price'))['total'] or 0
 
-    daily_sales = Bill.objects.filter(
+    today = timezone.now().date()
+
+    # --- Bills ---
+    daily_bill_sales = Bill.objects.filter(
         created_at__date=today
     ).aggregate(total=Sum('grand_total'))['total'] or 0
-
-    month_start = today.replace(day=1)
-    monthly_sales = Bill.objects.filter(
-        created_at__date__gte=month_start
+    
+    monthly_bill_sales = Bill.objects.filter(
+        created_at__date__gte=today.replace(day=1)
     ).aggregate(total=Sum('grand_total'))['total'] or 0
+    
+    # --- Services ---
+    daily_service_income = Service.objects.filter(
+        created_at__date=today
+    ).aggregate(total=Sum('service_price'))['total'] or 0
+    
+    monthly_service_income = Service.objects.filter(
+        created_at__date__gte=today.replace(day=1)
+    ).aggregate(total=Sum('service_price'))['total'] or 0
+
 
     return Response({
         'total_sales': float(total_sales),
         'service_income': float(service_income),
-        'daily_sales': float(daily_sales),
-        'monthly_sales': float(monthly_sales),
-        'total_revenue': float(total_sales + service_income)
+        'daily_sales': float(daily_bill_sales + daily_service_income),
+        'monthly_sales': float(monthly_bill_sales + monthly_service_income),
+        'total_revenue': float(total_sales + service_income),
     })
 
 # ==========================
