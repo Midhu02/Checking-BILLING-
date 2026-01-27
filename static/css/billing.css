@@ -351,6 +351,35 @@ body {
 }
 
 /* =====================================================
+   MOBILE ALIGNMENT FIX FOR PRICE / STOCK / QTY
+===================================================== */
+@media (max-width: 480px) {
+
+    .form-row {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    /* Price & Stock side-by-side */
+    .form-row .input-group:nth-child(1),
+    .form-row .input-group:nth-child(2) {
+        flex: 0 0 calc(50% - 7px);
+    }
+
+    /* Quantity full width */
+    .form-row .input-group:nth-child(3) {
+        flex: 0 0 100%;
+    }
+
+    #quantity {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+    }
+}
+
+
+/* =====================================================
    SMALL DEVICES
 ===================================================== */
 @media (max-width: 380px) {
