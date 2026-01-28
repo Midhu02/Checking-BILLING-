@@ -56,6 +56,28 @@ body {
     color: var(--text-light);
 }
 
+.section-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-title{
+    margin: 0;
+}
+
+.btn-return{
+    padding: 6px 4px;
+    background-color: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-return:hover{
+    background-color: #dc2626;
+}
 
 /* CARDS */
 .card {
