@@ -9,7 +9,7 @@
     /* Floating Action Button for Proforma Invoice */
     .fab-proforma {
         position: fixed;
-        bottom: 7rem; 
+        bottom: 7rem;
         right: 1.5rem;
         width: 56px;
         height: 56px;
@@ -18,7 +18,7 @@
         color: white;
         font-size: 1.8rem;
         border: none;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
         z-index: 950;
         display: flex;
         align-items: center;
@@ -26,8 +26,15 @@
         cursor: pointer;
         transition: all 0.2s ease;
     }
-    .fab-proforma:hover { transform: scale(1.1); background: #fb8c00; }
-    .fab-proforma:active { transform: scale(0.95); }
+
+    .fab-proforma:hover {
+        transform: scale(1.1);
+        background: #fb8c00;
+    }
+
+    .fab-proforma:active {
+        transform: scale(0.95);
+    }
 </style>
 {% endblock %}
 
@@ -48,7 +55,15 @@
     <!-- ADD / EDIT PRODUCT FORM -->
     <section class="card">
         <form id="addProductForm">
-            <h4 class="section-title">Add / Edit Product</h4>
+            <div class="section-header">
+                <h4 class="section-title">Add / Edit Product</h4>
+
+                <button type="button" id="openReturnBtn" class="btn return">
+                    Return Product
+                </button>
+
+            </div>
+
 
             <div class="input-group">
                 <span class="input-icon">📦</span>
@@ -146,6 +161,12 @@
         if (proformaBtn) {
             proformaBtn.addEventListener('click', function () {
                 window.location.href = "{% url 'proforma_invoice' %}";
+            });
+        }
+        const returnBtn = document.getElementById('openReturnBtn');
+        if (returnBtn) {
+            returnBtn.addEventListener('click', function () {
+                window.location.href = "{% url 'return_page' %}";
             });
         }
     });
