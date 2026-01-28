@@ -162,3 +162,21 @@ class ProformaItem(models.Model):
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=12, decimal_places=2)
     total = models.DecimalField(max_digits=12, decimal_places=2)
+
+class ReturnInvoice(models.Model):
+    invoice = models.ForeignKey(
+        'Bill',
+        on_delete=models.CASCADE,
+        related_name='returns'
+    )
+    product_name = models.CharField(max_length=255)
+    quantity = models.PositiveIntegerField()
+    return_type = models.CharField(
+        max_length=20,
+        choices=[('refund', 'Refund'), ('replace', 'Replacement')]
+    )
+    reason = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Return - {self.invoice.invoice_no}"
