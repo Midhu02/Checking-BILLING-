@@ -3,14 +3,13 @@ from . import views
 
 urlpatterns = [
     path('', views.login_view, name='login'),
-    path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('billing/', views.billing_page, name='billing'),
     path('inventory/', views.inventory_page, name='inventory'),
     path('invoice/', views.invoice_page, name='invoice'),
     path('service/', views.service_page, name='service'),
     path('reports/', views.reports_page, name='reports'),
-
+    path('return/', views.return_page, name='return_page'),
     path('proforma-invoice/', views.proforma_invoice_page, name='proforma_invoice'),
 
 
@@ -29,4 +28,6 @@ urlpatterns = [
     path('api/reports/', views.reports_data, name='reports_data'),
     path('api/proforma/create/', views.create_proforma, name='create_proforma'),
     path('api/proforma/', views.proforma_list, name='proforma_list'),
+    path('api/products/suggest/', views.product_suggest, name='product_suggest'),
+    path('api/returns/process/', views.process_return, name='process_return'),
 ]
