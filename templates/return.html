@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Return Product - Mobile Billing{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/return.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="inventory-page">
+    <header class="inventory-header">
+        <img src="{% static 'images/logo.png' %}" class="inventory-logo">
+        <span class="inventory-title">Return Product</span>
+    </header>
+
+    <section class="card">
+        <form id="returnForm">
+            {% csrf_token %}
+            <div class="input-group">
+                <span class="input-icon">🔎</span>
+                <input type="text" id="returnProductName" name="name" autocomplete="off" placeholder=" " />
+                <label>Product Name</label>
+                <div id="suggestions" class="autocomplete-list" style="position:relative"></div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group flex-1">
+                    <span class="input-icon">📦</span>
+                    <input type="text" id="returnImei" readonly placeholder=" ">
+                    <label>IMEI</label>
+                </div>
+                <div class="input-group flex-1">
+                    <span class="input-icon">📊</span>
+                    <input type="number" id="returnStock" readonly placeholder=" ">
+                    <label>Stock</label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="input-group flex-1">
+                    <span class="input-icon">💰</span>
+                    <input type="number" id="returnSelling" readonly placeholder=" ">
+                    <label>Selling Price</label>
+                </div>
+                <div class="input-group flex-1">
+                    <span class="input-icon">💵</span>
+                    <input type="number" id="returnPurchase" readonly placeholder=" ">
+                    <label>Purchase Price</label>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">🔢</span>
+                <input type="number" id="returnQuantity" name="quantity" min="1" value="1">
+                <label>Quantity to Return</label>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">📝</span>
+                <select id="returnType" name="return_type">
+                    <option value=""></option>
+                    <option value="refund">Refund</option>
+                    <option value="replace">Replacement</option>
+                </select>
+                <label>Return Type</label>
+            </div>
+
+            <div class="input-group">
+                <span class="input-icon">✍️</span>
+                <input type="text" id="returnReason" name="reason" placeholder=" ">
+                <label>Reason (optional)</label>
+            </div>
+
+            <input type="hidden" id="returnProductId" name="product_id">
+
+            <button type="submit" class="btn btn-primary full-width">Process Return</button>
+        </form>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const SUGGEST_URL = "{% url 'product_suggest' %}";
+    const PROCESS_RETURN_URL = "{% url 'process_return' %}";
+</script>
+<script src="{% static 'js/return.js' %}"></script>
+{% endblock %}
