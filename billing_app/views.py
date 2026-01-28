@@ -1,12 +1,12 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import models
 from datetime import datetime
-from django.db.models import ProtectedError, Sum
-from django.utils.dateparse import parse_date
-
+from django.db.models import ProtectedError
+from django.db.models import Q
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -292,3 +292,78 @@ def proforma_list(request):
     qs = ProformaInvoice.objects.all().order_by('-created_at')
     serializer = ProformaInvoiceSerializer(qs, many=True)
     return Response({'results': serializer.data})
+
+
+# ==========================
+# RETURN PAGE + APIs
+# ==========================
+@login_required
+def return_page(request):
+    return render(request, 'return.html')
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def product_suggest(request):
+    q = request.GET.get('q', '').strip()
+
+    products = Product.objects.filter(
+        Q(name__icontains=q),
+        stock__gt=0        # ✅ IMPORTANT
+    )[:10]
+
+    data = [{
+        'id': p.id,
+        'name': p.name,
+        'imei': p.imei,
+        'stock': p.stock,
+        'selling_price': p.selling_price,
+        'purchase_price': p.purchase_price
+    } for p in products]
+
+    return JsonResponse({'results': data})
+
+@api_view(['POST'])
+@permission_classes([IsStaffOrAdminUser])
+def process_return(request):
+    """Process a returned product (reduces stock as requested)."""
+    data = request.data
+    product_id = data.get('product_id')
+    name = data.get('name')
+    try:
+        quantity = int(data.get('quantity', 0))
+    except (TypeError, ValueError):
+        return Response({'error': 'Invalid quantity'}, status=400)
+
+    if quantity <= 0:
+        return Response({'error': 'Quantity must be greater than 0'}, status=400)
+
+    product = None
+    if product_id:
+        try:
+            product = Product.objects.get(pk=product_id)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=404)
+    elif name:
+        product = Product.objects.filter(name__iexact=name).first()
+        if not product:
+            product = Product.objects.filter(name__icontains=name).first()
+        if not product:
+            return Response({'error': 'Product not found'}, status=404)
+    else:
+        return Response({'error': 'Product identifier required'}, status=400)
+
+    # Reduce stock as per user's request
+    if product.stock < quantity:
+        return Response({'error': 'Insufficient stock to process return'}, status=400)
+
+    from django.db import transaction
+    try:
+        with transaction.atomic():
+            product.stock -= quantity
+            product.save()
+    except Exception as e:
+        return Response({'error': 'Failed to update stock', 'details': str(e)}, status=500)
+
+    return Response({'message': 'Return processed', 'product_id': product.id, 'new_stock': product.stock})
+
