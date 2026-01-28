@@ -1,0 +1,235 @@
+/* =====================================================
+   ROOT VARIABLES (MATCH BILLING THEME)
+===================================================== */
+:root {
+    --bg-primary: #0f172a;
+    --bg-card: #1e293b;
+    --accent: #38bdf8;
+    --accent-dark: #0284c7;
+    --text-light: #f8fafc;
+    --text-muted: #94a3b8;
+
+    --radius-lg: 16px;
+    --radius-md: 12px;
+    --shadow: 0 10px 25px rgba(0,0,0,0.35);
+}
+
+/* =====================================================
+   RESET
+===================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', system-ui, sans-serif;
+}
+
+body {
+    background: var(--bg-primary);
+    color: var(--text-light);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* =====================================================
+   PAGE LAYOUT
+===================================================== */
+.inventory-page {
+    width: 100%;
+    max-width: 430px;
+    padding: 16px;
+    padding-bottom: 120px;
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+.inventory-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.inventory-logo {
+    height: 42px;
+    border-radius: 10px;
+}
+
+.inventory-title {
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* =====================================================
+   CARD
+===================================================== */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow);
+}
+
+/* =====================================================
+   INPUT GROUP (FLOAT LABEL)
+===================================================== */
+.input-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 14px 40px;
+    border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    background: #020617;
+    color: var(--text-light);
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(56,189,248,0.25);
+}
+
+/* Label */
+.input-group label {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 13px;
+    pointer-events: none;
+    transition: 0.2s ease;
+}
+
+/* Float label */
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label,
+.input-group select:focus + label,
+.input-group select:not([value=""]) + label {
+    top: -7px;
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--bg-card);
+    padding: 0 6px;
+}
+
+/* Icon */
+.input-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.85;
+}
+
+/* =====================================================
+   FORM ROW
+===================================================== */
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+.btn {
+    padding: 14px;
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.15s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+    color: #fff;
+}
+
+.btn:hover {
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+}
+
+.btn:active {
+    transform: scale(0.96);
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* =====================================================
+   AUTOCOMPLETE DROPDOWN
+===================================================== */
+.autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #020617;
+    border: 1.5px solid rgba(56,189,248,0.45);
+    border-radius: 14px;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.7);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 5000;
+}
+
+.autocomplete-list div {
+    padding: 12px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.autocomplete-list div:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-list div:hover {
+    background: rgba(56,189,248,0.18);
+}
+
+/* =====================================================
+   MOBILE OPTIMIZATION
+===================================================== */
+@media (max-width: 480px) {
+
+    .form-row {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    /* Two columns */
+    .form-row .input-group {
+        flex: 0 0 calc(50% - 7px);
+    }
+
+    /* Quantity full width */
+    #returnQuantity {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .inventory-title {
+        font-size: 20px;
+    }
+}
